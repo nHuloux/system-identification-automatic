@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 
-# Fonction de génération d’un système aléatoire
 def generate_system():
     order = random.choice([1, 2])
     t = np.linspace(0, 10, 500)
@@ -26,18 +25,17 @@ def generate_system():
         params = {'K': K, 'omega_0': omega_0, 'xi': xi}
     return order, t, y, params
 
-# Initialisation ou régénération déclenchée
-if 'regenerate_flag' not in st.session_state:
-    st.session_state.regenerate_flag = True
-
-if st.session_state.regenerate_flag:
+# Initialisation (unique ou après confirmation)
+if 'confirmed_refresh' not in st.session_state:
+    st.session_state.confirmed_refresh = False
+if 'order' not in st.session_state or st.session_state.confirmed_refresh:
     st.session_state.order, st.session_state.t, st.session_state.y, st.session_state.params = generate_system()
-    st.session_state.regenerate_flag = False
+    st.session_state.confirmed_refresh = False
 
-# Titre et graphique
+# Titre
 st.title("🔎 Identification d'un système (réponse indicielle)")
-st.write("Le système affiché est soit du **premier ordre**, soit du **second ordre**.")
 
+# Affichage du graphe
 fig, ax = plt.subplots()
 ax.plot(st.session_state.t, st.session_state.y)
 ax.set_xlabel("Temps (s)")
@@ -50,14 +48,13 @@ st.pyplot(fig)
 st.subheader("🎯 Estime les paramètres du système")
 order_guess = st.radio("Quel est l'ordre du système affiché ?", ["Premier ordre", "Second ordre"])
 K = st.number_input("K", min_value=0.0, step=0.1)
-
 if order_guess == "Premier ordre":
     tau = st.number_input("tau", min_value=0.0, step=0.1)
 else:
     omega = st.number_input("ω₀", min_value=0.0, step=0.1)
     xi = st.number_input("ξ", min_value=0.0, step=0.05)
 
-# Vérification de la réponse
+# Vérification
 if st.button("✅ Valider"):
     correct = False
     real = st.session_state.params
@@ -69,15 +66,18 @@ if st.button("✅ Valider"):
             abs(omega - real['omega_0']) < 0.1 and
             abs(xi - real['xi']) < 0.1):
             correct = True
-
     if correct:
         st.success("Bonne réponse 🎉")
     else:
         st.error("Incorrect. Essaie encore.")
 
-# Génération d’un nouveau système via flag
+# Double bouton pour éviter la régénération non désirée
 if st.button("🔁 Générer un nouveau système"):
-    st.session_state.regenerate_flag = True
-    st.experimental_rerun = lambda: None  # neutralisation de l'appel si utilisé par erreur
-    st.stop()  # arrête l'exécution ici pour relancer en haut avec le flag
+    st.session_state.ready_to_refresh = True
 
+if st.session_state.get("ready_to_refresh", False):
+    if st.button("🟢 Oui, je veux vraiment un autre graphe"):
+        st.session_state.confirmed_refresh = True
+        st.session_state.ready_to_refresh = False
+        st.experimental_rerun = lambda: None  # neutralise juste au cas où
+        st.stop()
