@@ -1,10 +1,9 @@
-# app.py
 import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
 import random
 
-# Génère un système aléatoire
+# Fonction pour générer un système
 def generate_system():
     order = random.choice([1, 2])
     t = np.linspace(0, 10, 500)
@@ -25,17 +24,19 @@ def generate_system():
             y = K * (1 - np.exp(-xi * omega_0 * t) *
                      np.cosh(omega_0 * np.sqrt(xi**2 - 1) * t))
         params = {'K': K, 'omega_0': omega_0, 'xi': xi}
-
     return order, t, y, params
 
-# État stocké dans la session
-if 'order' not in st.session_state:
-    st.session_state.order, st.session_state.t, st.session_state.y, st.session_state.params = generate_system()
+# Initialisation de l'état
+if 'needs_update' not in st.session_state:
+    st.session_state.needs_update = True
 
-# Titre
+if st.session_state.needs_update:
+    st.session_state.order, st.session_state.t, st.session_state.y, st.session_state.params = generate_system()
+    st.session_state.needs_update = False
+
+# Affichage
 st.title("🔎 Identification de système (Réponse indicielle)")
 
-# Affichage du graphique
 fig, ax = plt.subplots()
 ax.plot(st.session_state.t, st.session_state.y)
 ax.set_title("Réponse indicielle aléatoire")
@@ -44,9 +45,8 @@ ax.set_ylabel("Amplitude")
 ax.grid(True)
 st.pyplot(fig)
 
-# Formulaire utilisateur
+# Entrée utilisateur
 st.subheader("🔧 Estimez les paramètres du système")
-
 order_guess = st.radio("Quel est l'ordre du système ?", ["Premier ordre", "Second ordre"])
 K = st.number_input("K", min_value=0.0, step=0.1)
 if order_guess == "Premier ordre":
@@ -55,7 +55,7 @@ else:
     omega = st.number_input("ω₀", min_value=0.0, step=0.1)
     xi = st.number_input("ξ", min_value=0.0, step=0.05)
 
-# Validation
+# Vérification
 if st.button("✅ Valider"):
     correct = False
     if order_guess == "Premier ordre" and st.session_state.order == 1:
@@ -72,7 +72,6 @@ if st.button("✅ Valider"):
     else:
         st.error("Incorrect. Essayez encore.")
 
-# Générer un nouveau système
+# Nouveau système sans experimental_rerun
 if st.button("🔁 Générer un nouveau système"):
-    st.session_state.order, st.session_state.t, st.session_state.y, st.session_state.params = generate_system()
-    st.experimental_rerun()
+    st.session_state.needs_update = True
