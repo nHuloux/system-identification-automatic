@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 
-# Fonction de génération d’un système aléatoire
+# --- FONCTION POUR GÉNÉRER UN SYSTÈME ---
 def generate_system():
     order = random.choice([1, 2])
     t = np.linspace(0, 10, 500)
@@ -26,15 +26,15 @@ def generate_system():
         params = {'K': K, 'omega_0': omega_0, 'xi': xi}
     return order, t, y, params
 
-# Initialisation unique au premier chargement
-if 'order' not in st.session_state:
+# --- INITIALISATION CONTROLEE ---
+if 'initialized' not in st.session_state:
     st.session_state.order, st.session_state.t, st.session_state.y, st.session_state.params = generate_system()
+    st.session_state.initialized = True
 
-# Interface
+# --- TITRE ---
 st.title("🔎 Identification d'un système (réponse indicielle)")
-st.write("Le système affiché est soit du **premier ordre**, soit du **second ordre** (avec ou sans dépassement).")
 
-# Graphique
+# --- AFFICHAGE GRAPHIQUE ---
 fig, ax = plt.subplots()
 ax.plot(st.session_state.t, st.session_state.y)
 ax.set_xlabel("Temps (s)")
@@ -43,9 +43,8 @@ ax.set_title("Réponse indicielle aléatoire")
 ax.grid(True)
 st.pyplot(fig)
 
-# Formulaire de saisie
+# --- FORMULAIRE UTILISATEUR ---
 st.subheader("🎯 Estime les paramètres du système")
-
 order_guess = st.radio("Quel est l'ordre du système affiché ?", ["Premier ordre", "Second ordre"])
 K = st.number_input("K", min_value=0.0, step=0.1)
 
@@ -55,7 +54,7 @@ else:
     omega = st.number_input("ω₀", min_value=0.0, step=0.1)
     xi = st.number_input("ξ", min_value=0.0, step=0.05)
 
-# Validation
+# --- VALIDATION ---
 if st.button("✅ Valider"):
     correct = False
     real = st.session_state.params
@@ -73,6 +72,6 @@ if st.button("✅ Valider"):
     else:
         st.error("Incorrect. Essaie encore.")
 
-# Nouveau système
+# --- REGENERATION GRAPHIQUE ---
 if st.button("🔁 Générer un nouveau système"):
     st.session_state.order, st.session_state.t, st.session_state.y, st.session_state.params = generate_system()
