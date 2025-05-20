@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 
-# Fonction pour générer un système
+# Fonction de génération d’un système aléatoire
 def generate_system():
     order = random.choice([1, 2])
     t = np.linspace(0, 10, 500)
@@ -26,52 +26,53 @@ def generate_system():
         params = {'K': K, 'omega_0': omega_0, 'xi': xi}
     return order, t, y, params
 
-# Initialisation de l'état
-if 'needs_update' not in st.session_state:
-    st.session_state.needs_update = True
-
-if st.session_state.needs_update:
+# Initialisation unique au premier chargement
+if 'order' not in st.session_state:
     st.session_state.order, st.session_state.t, st.session_state.y, st.session_state.params = generate_system()
-    st.session_state.needs_update = False
 
-# Affichage
-st.title("🔎 Identification de système (Réponse indicielle)")
+# Interface
+st.title("🔎 Identification d'un système (réponse indicielle)")
+st.write("Le système affiché est soit du **premier ordre**, soit du **second ordre** (avec ou sans dépassement).")
 
+# Graphique
 fig, ax = plt.subplots()
 ax.plot(st.session_state.t, st.session_state.y)
-ax.set_title("Réponse indicielle aléatoire")
 ax.set_xlabel("Temps (s)")
 ax.set_ylabel("Amplitude")
+ax.set_title("Réponse indicielle aléatoire")
 ax.grid(True)
 st.pyplot(fig)
 
-# Entrée utilisateur
-st.subheader("🔧 Estimez les paramètres du système")
-order_guess = st.radio("Quel est l'ordre du système ?", ["Premier ordre", "Second ordre"])
+# Formulaire de saisie
+st.subheader("🎯 Estime les paramètres du système")
+
+order_guess = st.radio("Quel est l'ordre du système affiché ?", ["Premier ordre", "Second ordre"])
 K = st.number_input("K", min_value=0.0, step=0.1)
+
 if order_guess == "Premier ordre":
     tau = st.number_input("tau", min_value=0.0, step=0.1)
 else:
     omega = st.number_input("ω₀", min_value=0.0, step=0.1)
     xi = st.number_input("ξ", min_value=0.0, step=0.05)
 
-# Vérification
+# Validation
 if st.button("✅ Valider"):
     correct = False
+    real = st.session_state.params
     if order_guess == "Premier ordre" and st.session_state.order == 1:
-        if abs(K - st.session_state.params['K']) < 0.1 and abs(tau - st.session_state.params['tau']) < 0.1:
+        if abs(K - real['K']) < 0.1 and abs(tau - real['tau']) < 0.1:
             correct = True
     elif order_guess == "Second ordre" and st.session_state.order == 2:
-        if (abs(K - st.session_state.params['K']) < 0.1 and
-            abs(omega - st.session_state.params['omega_0']) < 0.1 and
-            abs(xi - st.session_state.params['xi']) < 0.1):
+        if (abs(K - real['K']) < 0.1 and
+            abs(omega - real['omega_0']) < 0.1 and
+            abs(xi - real['xi']) < 0.1):
             correct = True
 
     if correct:
         st.success("Bonne réponse 🎉")
     else:
-        st.error("Incorrect. Essayez encore.")
+        st.error("Incorrect. Essaie encore.")
 
-# Nouveau système sans experimental_rerun
+# Nouveau système
 if st.button("🔁 Générer un nouveau système"):
-    st.session_state.needs_update = True
+    st.session_state.order, st.session_state.t, st.session_state.y, st.session_state.params = generate_system()
