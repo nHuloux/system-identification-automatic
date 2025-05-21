@@ -16,7 +16,7 @@ def generate_system():
     else:
         K = round(random.uniform(0.5, 5.0), 2)
         omega_0 = round(random.uniform(1, 5.0), 2)
-        xi = round(random.uniform(0.3, 1,8), 2)
+        xi = round(random.uniform(0.3, 1.8), 2)
         if xi < 1:
             y = K * (1 - (1 / np.sqrt(1 - xi**2)) * np.exp(-xi * omega_0 * t) *
                      np.sin(omega_0 * np.sqrt(1 - xi**2) * t + np.arccos(xi)))
