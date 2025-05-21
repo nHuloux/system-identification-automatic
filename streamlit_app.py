@@ -49,7 +49,7 @@ with tabs[0]:
     vline_val = st.sidebar.slider("Temps (droite verticale)", 0.0, 10.0, 1.0, 0.05) if show_vline else None
 
     show_2hline = st.sidebar.checkbox("Afficher une deuxième droite horizontale", value=False)
-    hline_2val = st.sidebar.slider("Valeur Y (droite horizontale)", 0.0, 1.3*st.session_state.params['K'], 1.0, 0.05) if show_hline else None
+    hline_2val = st.sidebar.slider("Valeur Y (droite horizontale)", 0.0, 1.3*st.session_state.params['K'], 1.0, 0.05) if show_2hline else None
 
 
     # Affichage du graphe
