@@ -42,25 +42,28 @@ with tabs[0]:
 
     # Sliders pour aides graphiques
     st.sidebar.markdown("### ➕ Aides visuelles")
-    show_hline = st.sidebar.checkbox("Afficher une droite horizontale", value=False)
-    hline_val = st.sidebar.slider("Valeur Y (droite horizontale)", 0.0, 1.3*st.session_state.params['K'], 1.0, 0.05) if show_hline else None
 
+    # Droites horizontales
+    show_h1 = st.sidebar.checkbox("Afficher une première droite horizontale", value=False)
+    h1_val = st.sidebar.slider("Valeur Y1 (1ère ligne)", 0.0, 3.0, 1.0, 0.1) if show_h1 else None
+
+    show_h2 = st.sidebar.checkbox("Afficher une deuxième droite horizontale", value=False)
+    h2_val = st.sidebar.slider("Valeur Y2 (2e ligne)", 0.0, 3.0, 2.0, 0.1) if show_h2 else None
+
+    # Droite verticale
     show_vline = st.sidebar.checkbox("Afficher une droite verticale", value=False)
-    vline_val = st.sidebar.slider("Temps (droite verticale)", 0.0, 10.0, 1.0, 0.05) if show_vline else None
+    vline_val = st.sidebar.slider("Temps (droite verticale)", 0.0, 10.0, 1.0, 0.1) if show_vline else None
 
-    show_2hline = st.sidebar.checkbox("Afficher une deuxième droite horizontale", value=False)
-    hline_2val = st.sidebar.slider("Valeur Y (droite horizontale)", 0.0, 1.3*st.session_state.params['K'], 1.0, 0.05) if show_2hline else None
-
-
-    # Affichage du graphe
     fig, ax = plt.subplots()
     ax.plot(st.session_state.t, st.session_state.y, label='Réponse mesurée')
-    if show_hline:
-        ax.axhline(hline_val, color='tab:red', linestyle='--', label=f'y = {hline_val}')
-    if show_2hline:
-        ax.axhline(hline_2val, color='tab:orange', linestyle='--', label=f'y = {hline_2val}')
+
+    if show_h1:
+        ax.axhline(h1_val, color='tab:red', linestyle='--', label=f'y₁ = {h1_val}')
+    if show_h2:
+        ax.axhline(h2_val, color='tab:orange', linestyle='--', label=f'y₂ = {h2_val}')
     if show_vline:
         ax.axvline(vline_val, color='tab:green', linestyle='--', label=f't = {vline_val}')
+
     ax.set_xlabel("Temps (s)")
     ax.set_ylabel("Amplitude")
     ax.set_title("Réponse indicielle aléatoire")
