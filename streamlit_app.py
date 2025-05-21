@@ -16,7 +16,7 @@ def generate_system():
     else:
         K = round(random.uniform(0.5, 5.0), 2)
         omega_0 = round(random.uniform(1, 5.0), 2)
-        xi = round(random.uniform(0.05, 3), 2)
+        xi = round(random.uniform(0.3, 1,8), 2)
         if xi < 1:
             y = K * (1 - (1 / np.sqrt(1 - xi**2)) * np.exp(-xi * omega_0 * t) *
                      np.sin(omega_0 * np.sqrt(1 - xi**2) * t + np.arccos(xi)))
@@ -75,12 +75,12 @@ with tabs[0]:
         correct = False
         real = st.session_state.params
         if order_guess == "Premier ordre" and st.session_state.order == 1:
-            if abs(K - real['K']) < 0.1 and abs(tau - real['tau']) < 0.1:
+            if abs(K - real['K']) < 0.2 and abs(tau - real['tau']) < 0.2:
                 correct = True
         elif order_guess == "Second ordre" and st.session_state.order == 2:
-            if (abs(K - real['K']) < 0.1 and
-                abs(omega - real['omega_0']) < 0.1 and
-                abs(xi - real['xi']) < 0.1):
+            if (abs(K - real['K']) < 0.2 and
+                abs(omega - real['omega_0']) < 0.2 and
+                abs(xi - real['xi']) < 0.2):
                 correct = True
         if correct:
             st.success("Bonne réponse 🎉")
