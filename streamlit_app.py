@@ -43,7 +43,7 @@ with tabs[0]:
     # Sliders pour aides graphiques
     st.sidebar.markdown("### ➕ Aides visuelles")
     show_hline = st.sidebar.checkbox("Afficher une droite horizontale", value=False)
-    hline_val = st.sidebar.slider("Valeur Y (droite horizontale)", 0.0, 30.0, 1.0, 0.05) if show_hline else None
+    hline_val = st.sidebar.slider("Valeur Y (droite horizontale)", 0.0, 1.2*K, 1.0, 0.05) if show_hline else None
 
     show_vline = st.sidebar.checkbox("Afficher une droite verticale", value=False)
     vline_val = st.sidebar.slider("Temps (droite verticale)", 0.0, 10.0, 1.0, 0.05) if show_vline else None
