@@ -9,14 +9,14 @@ def generate_system():
     t = np.linspace(0, 10, 500)
 
     if order == 1:
-        K = round(random.uniform(0.5, 20.0), 2)
+        K = round(random.uniform(0.5, 5.0), 2)
         tau = round(random.uniform(0.5, 3.0), 2)
         y = K * (1 - np.exp(-t / tau))
         params = {'K': K, 'tau': tau}
     else:
-        K = round(random.uniform(0.5, 20.0), 2)
-        omega_0 = round(random.uniform(0.5, 10.0), 2)
-        xi = round(random.uniform(0.05, 5), 2)
+        K = round(random.uniform(0.5, 5.0), 2)
+        omega_0 = round(random.uniform(1, 5.0), 2)
+        xi = round(random.uniform(0.05, 3), 2)
         if xi < 1:
             y = K * (1 - (1 / np.sqrt(1 - xi**2)) * np.exp(-xi * omega_0 * t) *
                      np.sin(omega_0 * np.sqrt(1 - xi**2) * t + np.arccos(xi)))
