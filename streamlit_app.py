@@ -66,7 +66,7 @@ with tabs[0]:
     order_guess = st.radio("Quel est l'ordre du système affiché ?", ["Premier ordre", "Second ordre"])
     K = st.number_input("K", min_value=0.0, step=0.1)
     if order_guess == "Premier ordre":
-        tau = st.number_input("tau", min_value=0.0, step=0.1)
+        tau = st.number_input("τ", min_value=0.0, step=0.1)
     else:
         omega = st.number_input("ω₀", min_value=0.0, step=0.1)
         xi = st.number_input("ξ", min_value=0.0, step=0.05)
