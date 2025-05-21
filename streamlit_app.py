@@ -40,8 +40,21 @@ tabs = st.tabs(["🔍 Identification", "📊 Comparaison (si second ordre)"])
 with tabs[0]:
     st.title("🔎 Identification d'un système (réponse indicielle)")
 
+    # Sliders pour aides graphiques
+    st.sidebar.markdown("### ➕ Aides visuelles")
+    show_hline = st.sidebar.checkbox("Afficher une droite horizontale", value=False)
+    hline_val = st.sidebar.slider("Valeur Y (droite horizontale)", 0.0, 3.0, 1.0, 0.1) if show_hline else None
+
+    show_vline = st.sidebar.checkbox("Afficher une droite verticale", value=False)
+    vline_val = st.sidebar.slider("Temps (droite verticale)", 0.0, 10.0, 1.0, 0.1) if show_vline else None
+
+    # Affichage du graphe
     fig, ax = plt.subplots()
     ax.plot(st.session_state.t, st.session_state.y, label='Réponse mesurée')
+    if show_hline:
+        ax.axhline(hline_val, color='tab:red', linestyle='--', label=f'y = {hline_val}')
+    if show_vline:
+        ax.axvline(vline_val, color='tab:green', linestyle='--', label=f't = {vline_val}')
     ax.set_xlabel("Temps (s)")
     ax.set_ylabel("Amplitude")
     ax.set_title("Réponse indicielle aléatoire")
