@@ -48,11 +48,17 @@ with tabs[0]:
     show_vline = st.sidebar.checkbox("Afficher une droite verticale", value=False)
     vline_val = st.sidebar.slider("Temps (droite verticale)", 0.0, 10.0, 1.0, 0.05) if show_vline else None
 
+    show_2hline = st.sidebar.checkbox("Afficher une deuxième droite horizontale", value=False)
+    hline_2val = st.sidebar.slider("Valeur Y (droite horizontale)", 0.0, 1.3*st.session_state.params['K'], 1.0, 0.05) if show_hline else None
+
+
     # Affichage du graphe
     fig, ax = plt.subplots()
     ax.plot(st.session_state.t, st.session_state.y, label='Réponse mesurée')
     if show_hline:
         ax.axhline(hline_val, color='tab:red', linestyle='--', label=f'y = {hline_val}')
+    if show_2hline:
+        ax.axhline(hline_2val, color='tab:orange', linestyle='--', label=f'y = {hline_val}')
     if show_vline:
         ax.axvline(vline_val, color='tab:green', linestyle='--', label=f't = {vline_val}')
     ax.set_xlabel("Temps (s)")
