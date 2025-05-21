@@ -37,11 +37,12 @@ st.title("🔎 Identification d'un système (réponse indicielle)")
 
 # Affichage du graphe
 fig, ax = plt.subplots()
-ax.plot(st.session_state.t, st.session_state.y)
+ax.plot(st.session_state.t, st.session_state.y, label='Réponse mesurée')
 ax.set_xlabel("Temps (s)")
 ax.set_ylabel("Amplitude")
 ax.set_title("Réponse indicielle aléatoire")
 ax.grid(True)
+ax.legend()
 st.pyplot(fig)
 
 # Interface utilisateur
@@ -79,49 +80,23 @@ if st.session_state.get("ready_to_refresh", False):
     if st.button("🟢 Oui, je veux vraiment un autre graphe"):
         st.session_state.confirmed_refresh = True
         st.session_state.ready_to_refresh = False
-        st.experimental_rerun = lambda: None  # neutralise juste au cas où
+        st.experimental_rerun = lambda: None
         st.stop()
 
-st.markdown("""
-Ce simulateur permet de comparer visuellement la réponse indicielle d’un système du **premier ordre** avec celle d’un **second ordre** en faisant varier les paramètres :
-- **K** : gain statique
-- **τ** : constante de temps (1er ordre)
-- **ω₀** : pulsation propre (2nd ordre)
-- **ξ** : facteur d’amortissement (2nd ordre)
-""")
+# Comparateur si le système généré est du second ordre
+if st.session_state.order == 2:
+    st.subheader("📊 Comparaison avec un système du premier ordre")
+    tau_comp = st.sidebar.slider("τ comparé (1er ordre)", 0.1, 5.0, 1.0, 0.1)
+    t = st.session_state.t
+    y1 = st.session_state.y
+    y2 = st.session_state.params['K'] * (1 - np.exp(-t / tau_comp))
 
-# Paramètres via sidebar
-K = st.sidebar.slider("K (gain)", 0.5, 2.0, 1.0, 0.1)
-tau = st.sidebar.slider("τ (1er ordre)", 0.1, 3.0, 1.0, 0.1)
-omega_0 = st.sidebar.slider("ω₀ (2nd ordre)", 0.1, 3.0, 1.0, 0.1)
-xi = st.sidebar.slider("ξ (2nd ordre)", 0.1, 3.0, 2.0, 0.1)
-
-# Temps
-t = np.linspace(0, 10, 500)
-
-# Réponse 1er ordre
-y1 = K * (1 - np.exp(-t / tau))
-
-# Réponse 2nd ordre
-if xi == 1:
-    y2 = K * (1 - (1 + omega_0 * t) * np.exp(-omega_0 * t))
-elif xi > 1:
-    r1 = -omega_0 * (xi - np.sqrt(xi**2 - 1))
-    r2 = -omega_0 * (xi + np.sqrt(xi**2 - 1))
-    A = K * r2 / (r2 - r1)
-    B = K - A
-    y2 = K - A * np.exp(r1 * t) - B * np.exp(r2 * t)
-else:
-    y2 = K * (1 - (1 / np.sqrt(1 - xi**2)) * np.exp(-xi * omega_0 * t) *
-              np.sin(omega_0 * np.sqrt(1 - xi**2) * t + np.arccos(xi)))
-
-# Affichage
-fig, ax = plt.subplots(figsize=(8, 4))
-ax.plot(t, y1, label='Premier ordre', linestyle='--')
-ax.plot(t, y2, label='Second ordre', linestyle='-')
-ax.set_xlabel("Temps (s)")
-ax.set_ylabel("Amplitude")
-ax.set_title("Réponses indicielle - Ordre 1 vs Ordre 2")
-ax.grid(True)
-ax.legend()
-st.pyplot(fig)
+    fig2, ax2 = plt.subplots()
+    ax2.plot(t, y1, label="Second ordre (réel)")
+    ax2.plot(t, y2, '--', label="Premier ordre (approché)")
+    ax2.set_title("Comparaison des réponses")
+    ax2.set_xlabel("Temps (s)")
+    ax2.set_ylabel("Amplitude")
+    ax2.grid(True)
+    ax2.legend()
+    st.pyplot(fig2)
