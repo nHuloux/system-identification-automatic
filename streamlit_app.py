@@ -9,14 +9,14 @@ def generate_system():
     t = np.linspace(0, 10, 500)
 
     if order == 1:
-        K = round(random.uniform(0.5, 2.0), 2)
+        K = round(random.uniform(0.5, 20.0), 2)
         tau = round(random.uniform(0.5, 3.0), 2)
         y = K * (1 - np.exp(-t / tau))
         params = {'K': K, 'tau': tau}
     else:
-        K = round(random.uniform(0.5, 2.0), 2)
-        omega_0 = round(random.uniform(1.0, 3.0), 2)
-        xi = round(random.uniform(0.05, 1.2), 2)
+        K = round(random.uniform(0.5, 20.0), 2)
+        omega_0 = round(random.uniform(0.5, 10.0), 2)
+        xi = round(random.uniform(0.05, 5), 2)
         if xi < 1:
             y = K * (1 - (1 / np.sqrt(1 - xi**2)) * np.exp(-xi * omega_0 * t) *
                      np.sin(omega_0 * np.sqrt(1 - xi**2) * t + np.arccos(xi)))
@@ -43,10 +43,10 @@ with tabs[0]:
     # Sliders pour aides graphiques
     st.sidebar.markdown("### ➕ Aides visuelles")
     show_hline = st.sidebar.checkbox("Afficher une droite horizontale", value=False)
-    hline_val = st.sidebar.slider("Valeur Y (droite horizontale)", 0.0, 3.0, 1.0, 0.1) if show_hline else None
+    hline_val = st.sidebar.slider("Valeur Y (droite horizontale)", 0.0, 30.0, 1.0, 0.05) if show_hline else None
 
     show_vline = st.sidebar.checkbox("Afficher une droite verticale", value=False)
-    vline_val = st.sidebar.slider("Temps (droite verticale)", 0.0, 10.0, 1.0, 0.1) if show_vline else None
+    vline_val = st.sidebar.slider("Temps (droite verticale)", 0.0, 10.0, 1.0, 0.05) if show_vline else None
 
     # Affichage du graphe
     fig, ax = plt.subplots()
