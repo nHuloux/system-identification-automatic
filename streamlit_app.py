@@ -58,7 +58,7 @@ with tabs[0]:
     if show_hline:
         ax.axhline(hline_val, color='tab:red', linestyle='--', label=f'y = {hline_val}')
     if show_2hline:
-        ax.axhline(hline_2val, color='tab:orange', linestyle='--', label=f'y = {hline_val}')
+        ax.axhline(hline_2val, color='tab:orange', linestyle='--', label=f'y = {hline_2val}')
     if show_vline:
         ax.axvline(vline_val, color='tab:green', linestyle='--', label=f't = {vline_val}')
     ax.set_xlabel("Temps (s)")
