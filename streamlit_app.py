@@ -15,8 +15,8 @@ def generate_system():
         params = {'K': K, 'tau': tau}
     else:
         K = round(random.uniform(0.5, 5.0), 2)
-        omega_0 = round(random.uniform(1, 5.0), 2)
-        xi = round(random.uniform(0.3, 1.8), 2)
+        omega_0 = round(random.uniform(1, 3), 2)
+        xi = round(random.uniform(0.3, 1.2), 2)
         if xi < 1:
             y = K * (1 - (1 / np.sqrt(1 - xi**2)) * np.exp(-xi * omega_0 * t) *
                      np.sin(omega_0 * np.sqrt(1 - xi**2) * t + np.arccos(xi)))
@@ -45,10 +45,10 @@ with tabs[0]:
 
     # Droites horizontales
     show_h1 = st.sidebar.checkbox("Afficher une première droite horizontale", value=False)
-    h1_val = st.sidebar.slider("Valeur Y1 (1ère ligne)", 0.0, 3.0, 1.0, 0.1) if show_h1 else None
+    h1_val = st.sidebar.slider("Valeur Y1 (1ère ligne)", 0.0, st.session_state.params['K']*1.3, 1.0, 0.1) if show_h1 else None
 
     show_h2 = st.sidebar.checkbox("Afficher une deuxième droite horizontale", value=False)
-    h2_val = st.sidebar.slider("Valeur Y2 (2e ligne)", 0.0, 3.0, 2.0, 0.1) if show_h2 else None
+    h2_val = st.sidebar.slider("Valeur Y2 (2e ligne)", 0.0, st.session_state.params['K']*1.3, 2.0, 0.1) if show_h2 else None
 
     # Droite verticale
     show_vline = st.sidebar.checkbox("Afficher une droite verticale", value=False)
