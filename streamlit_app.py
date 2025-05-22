@@ -45,14 +45,14 @@ with tabs[0]:
 
     # Droites horizontales
     show_h1 = st.sidebar.checkbox("Afficher une première droite horizontale", value=False)
-    h1_val = st.sidebar.slider("Valeur Y1 (1ère ligne)", 0.0, st.session_state.params['K']*1.3, 1.0, 0.05) if show_h1 else None
+    h1_val = st.sidebar.slider("Valeur Y1 (1ère ligne)", 0.0, st.session_state.params['K']*1.3, 1.0, 0.01) if show_h1 else None
 
     show_h2 = st.sidebar.checkbox("Afficher une deuxième droite horizontale", value=False)
-    h2_val = st.sidebar.slider("Valeur Y2 (2e ligne)", 0.0, st.session_state.params['K']*1.3, 2.0, 0.05) if show_h2 else None
+    h2_val = st.sidebar.slider("Valeur Y2 (2e ligne)", 0.0, st.session_state.params['K']*1.3, 2.0, 0.01) if show_h2 else None
 
     # Droite verticale
     show_vline = st.sidebar.checkbox("Afficher une droite verticale", value=False)
-    vline_val = st.sidebar.slider("Temps (droite verticale)", 0.0, 10.0, 1.0, 0.05) if show_vline else None
+    vline_val = st.sidebar.slider("Temps (droite verticale)", 0.0, 10.0, 1.0, 0.01) if show_vline else None
 
     fig, ax = plt.subplots()
     ax.plot(st.session_state.t, st.session_state.y, label='Réponse mesurée')
