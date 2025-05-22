@@ -45,14 +45,14 @@ with tabs[0]:
 
     # Droites horizontales
     show_h1 = st.sidebar.checkbox("Afficher une première droite horizontale", value=False)
-    h1_val = st.sidebar.slider("Valeur Y1 (1ère ligne)", 0.0, st.session_state.params['K']*1.3, 1.0, 0.1) if show_h1 else None
+    h1_val = st.sidebar.slider("Valeur Y1 (1ère ligne)", 0.0, st.session_state.params['K']*1.3, 1.0, 0.05) if show_h1 else None
 
     show_h2 = st.sidebar.checkbox("Afficher une deuxième droite horizontale", value=False)
-    h2_val = st.sidebar.slider("Valeur Y2 (2e ligne)", 0.0, st.session_state.params['K']*1.3, 2.0, 0.1) if show_h2 else None
+    h2_val = st.sidebar.slider("Valeur Y2 (2e ligne)", 0.0, st.session_state.params['K']*1.3, 2.0, 0.05) if show_h2 else None
 
     # Droite verticale
     show_vline = st.sidebar.checkbox("Afficher une droite verticale", value=False)
-    vline_val = st.sidebar.slider("Temps (droite verticale)", 0.0, 10.0, 1.0, 0.1) if show_vline else None
+    vline_val = st.sidebar.slider("Temps (droite verticale)", 0.0, 10.0, 1.0, 0.05) if show_vline else None
 
     fig, ax = plt.subplots()
     ax.plot(st.session_state.t, st.session_state.y, label='Réponse mesurée')
@@ -84,12 +84,12 @@ with tabs[0]:
         correct = False
         real = st.session_state.params
         if order_guess == "Premier ordre" and st.session_state.order == 1:
-            if abs(K - real['K']) < 0.2 and abs(tau - real['tau']) < 0.2:
+            if abs(K - real['K']) < 0.1 and abs(tau - real['tau']) < 0.1:
                 correct = True
         elif order_guess == "Second ordre" and st.session_state.order == 2:
-            if (abs(K - real['K']) < 0.2 and
-                abs(omega - real['omega_0']) < 0.2 and
-                abs(xi - real['xi']) < 0.2):
+            if (abs(K - real['K']) < 0.1 and
+                abs(omega - real['omega_0']) < 0.1 and
+                abs(xi - real['xi']) < 0.1):
                 correct = True
         if correct:
             st.success("Bonne réponse 🎉")
@@ -114,7 +114,7 @@ with tabs[1]:
         t = st.session_state.t
         y2 = st.session_state.y
 
-        tau_approx = st.slider("τ (du 1er ordre à comparer)", 0.1, 5.0, 1.0, 0.1)
+        tau_approx = st.slider("τ (du 1er ordre à comparer)", 0.1, 5.0, 1.0, 0.05)
         y1 = K2 * (1 - np.exp(-t / tau_approx))
 
         fig2, ax2 = plt.subplots()
