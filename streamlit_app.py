@@ -94,7 +94,7 @@ with tabs[0]:
         if correct:
             st.success(f"Bonne réponse 🎉 - params {real}")
         else:
-            st.error("Incorrect. Essaie encore.")
+            st.error(f"Incorrect. Essaie encore. - params {real}")
 
     if st.button("🔁 Générer un nouveau système"):
         st.session_state.ready_to_refresh = True
