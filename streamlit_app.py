@@ -84,15 +84,15 @@ with tabs[0]:
         correct = False
         real = st.session_state.params
         if order_guess == "Premier ordre" and st.session_state.order == 1:
-            if abs(K - real['K']) < 0.1 and abs(tau - real['tau']) < 0.1:
+            if abs(K - real['K']) < 0.2 and abs(tau - real['tau']) < 0.2:
                 correct = True
         elif order_guess == "Second ordre" and st.session_state.order == 2:
             if (abs(K - real['K']) < 0.1 and
-                abs(omega - real['omega_0']) < 0.1 and
+                abs(omega - real['omega_0']) < 0.2 and
                 abs(xi - real['xi']) < 0.1):
                 correct = True
         if correct:
-            st.success("Bonne réponse 🎉")
+            st.success(f"Bonne réponse 🎉 - params {real}")
         else:
             st.error("Incorrect. Essaie encore.")
 
